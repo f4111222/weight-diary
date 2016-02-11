@@ -4,4 +4,6 @@ target 'WeightDiary' do
     pod 'SDWebImage'
     pod 'MBProgressHUD'
     pod 'UIColor-HexString'
+    pod 'PNChart'
+    pod 'BEMSimpleLineGraph'
 end
