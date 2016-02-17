@@ -7,10 +7,13 @@
 //
 
 #import "TabBarController.h"
+#import "UIColor+HexString.h"
+
+#import "Config.h"
+
+#import "InputViewController.h"
 #import "DataViewController.h"
 #import "UserViewController.h"
-
-#import "UIColor+HexString.h"
 
 @interface TabBarController ()
 
@@ -20,30 +23,22 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     NSLog(@"TabBar: MainView");
     DataViewController *dataView = [[DataViewController alloc] init];
     UserViewController *userView = [[UserViewController alloc] init];
-    UIViewController *addRecordView = [[UIViewController alloc] init];
     
     // entrance for data interface
     UIImage *dataImage = [[UIImage imageNamed:@"data@3x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     UIImage *dataSelectedImage = [[UIImage imageNamed:@"dataSelected@3x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     UITabBarItem *dataItem = [[UITabBarItem alloc] initWithTitle:@"" image:dataImage selectedImage:dataSelectedImage];
-    [dataItem setTag:0];
     [dataItem setImageInsets:UIEdgeInsetsMake(5, 0, -5, 0)];
     
     // entrance for history interface
     UIImage *historyImage = [[UIImage imageNamed:@"history@3x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     UIImage *historySelectedImage = [[UIImage imageNamed:@"historySelected@3x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     UITabBarItem *historyItem = [[UITabBarItem alloc] initWithTitle:@"" image:historyImage selectedImage:historySelectedImage];
-    [historyItem setTag:1];
     [historyItem setImageInsets:UIEdgeInsetsMake(4, 0, -4, 0)];
-    
-    // entrance for addRecord interface
-    UIImage *addRecordImage = [[UIImage imageNamed:@"addRecord@3x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    UITabBarItem *addRecordItem = [[UITabBarItem alloc] initWithTitle:@"" image:addRecordImage selectedImage:addRecordImage];
-    [addRecordItem setTag:2];
-    [addRecordItem setImageInsets:UIEdgeInsetsMake(6, 0, -6, 0)];
     
     // entrance for user interface
     UIImage *userImage = [[UIImage imageNamed:@"user@3x.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -61,7 +56,6 @@
 
     // set TabBar item for each view
     [dataView setTabBarItem:dataItem];
-    [addRecordView setTabBarItem:addRecordItem];
     [userView setTabBarItem:userItem];
     
     // set TabBar border color
@@ -69,8 +63,23 @@
     [self.tabBar.layer setBorderColor:[UIColor colorWithHexString:@"#eaeaea"].CGColor];
     [self.tabBar setClipsToBounds:YES];
     
-    [self setViewControllers:@[dataView, addRecordView, userView]];
-    [self setSelectedIndex:0];
+    [self setViewControllers:@[dataView, userView]];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if ([Config needSetUserInfo]) {
+        NSLog(@"TabBar: InputView");
+        CATransition* transition = [CATransition animation];
+        transition.duration = 1;
+        transition.type = kCATransitionFade;
+        transition.subtype = kCATransitionFromTop;
+        [self.view.window.layer addAnimation:transition forKey:kCATransition];
+        
+        InputViewController *inputView = [[InputViewController alloc] init];
+        [self presentViewController:inputView animated:NO completion:nil];
+    }
 }
 
 /**

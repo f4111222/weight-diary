@@ -14,8 +14,10 @@
 
 @interface DataViewController : UITabBarController <BEMSimpleLineGraphDataSource, BEMSimpleLineGraphDelegate>
 
+@property (strong, nonatomic) NSString *weightDrop;
+@property (strong, nonatomic) NSArray *historyData;
+
 @property (strong, nonatomic) PNCircleChart *targetChart;
-//@property (strong, nonatomic) PNBarChart *historyChart;
 @property (strong, nonatomic) BEMSimpleLineGraphView *historyChart;
 
 @end

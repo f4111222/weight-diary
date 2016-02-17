@@ -6,4 +6,5 @@ target 'WeightDiary' do
     pod 'UIColor-HexString'
     pod 'PNChart'
     pod 'BEMSimpleLineGraph'
+    pod 'FMDB'
 end

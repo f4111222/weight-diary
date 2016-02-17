@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "TabBarController.h"
 
+#import "Config.h"
+
 @interface AppDelegate ()
 
 @end
@@ -17,11 +19,15 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    NSLog(@"DatabasePath: %@", [Config databasePath]);
+    [Config createDatabase];
+    
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     TabBarController *app = [[TabBarController alloc] init];
     self.window.backgroundColor = [UIColor whiteColor];
     self.window.rootViewController = app;
     [self.window makeKeyAndVisible];
+
     return YES;
 }
 
