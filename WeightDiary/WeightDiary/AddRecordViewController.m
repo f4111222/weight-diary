@@ -88,6 +88,7 @@
     self.date.font = [UIFont boldSystemFontOfSize:20];
     self.date.textColor = [UIColor colorWithHexString:@"#404d5f"];
     self.date.textAlignment = NSTextAlignmentRight;
+    [self.date setUserInteractionEnabled:YES];
     [self.view addSubview:self.date];
     
     UIButton *editDate = [[UIButton alloc] initWithFrame:CGRectMake(editDateLeft, editDateTop, editDateWidth, editDateHeight)];
@@ -140,6 +141,7 @@
     self.weight.font = [UIFont boldSystemFontOfSize:20];
     self.weight.textColor = [UIColor colorWithHexString:@"#404d5f"];
     self.weight.textAlignment = NSTextAlignmentRight;
+    [self.weight setUserInteractionEnabled:YES];
     [self.view addSubview:self.weight];
     
     UIButton *editWeight = [[UIButton alloc] initWithFrame:CGRectMake(editWeightLeft, editWeightTop, editWeightWidth, editWeightHeight)];
@@ -202,11 +204,20 @@
 - (void)actionTap:(UITapGestureRecognizer *)tap {
     CGPoint location = [tap locationInView:self.view];
     
-    if (location.x > 40 && location.x < CGRectGetWidth(self.view.frame) - 40
-        && location.y > 100 && location.y < 300) {
+    if (location.y > 80 && location.y < 350) {
         return;
     } else {
         [self actionDismiss];
+    }
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    
+    if (touch.view == self.date) {
+        [self actionSelectDate];
+    } else if (touch.view == self.weight) {
+        [self actionSelectWeight];
     }
 }
 

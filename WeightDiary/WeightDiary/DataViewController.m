@@ -166,7 +166,7 @@
     CGFloat historyChartTop = 40 + CGRectGetWidth(self.view.bounds) - 80 * 2 + 20 + 90 * 2 + 1;
     CGFloat historyChartHeight = CGRectGetHeight(self.view.bounds) - 60 - historyChartTop;
     
-    self.historyChart = [[BEMSimpleLineGraphView alloc] initWithFrame:CGRectMake(0, historyChartTop, SCREEN_WIDTH - 50, historyChartHeight)];
+    self.historyChart = [[BEMSimpleLineGraphView alloc] initWithFrame:CGRectMake(0, historyChartTop, SCREEN_WIDTH, historyChartHeight)];
     self.historyChart.delegate = self;
     self.historyChart.dataSource = self;
     self.historyChart.enableBezierCurve = YES;
@@ -316,8 +316,9 @@
 #pragma - Setup Add Button
 
 - (void)setupAddButton {
-    UIButton *add = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 10 - 30, 28, 30, 30)];
-    [add setBackgroundImage:[UIImage imageNamed:@"add@3x.png"] forState:UIControlStateNormal];
+    UIButton *add = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 10 - 50, 28, 50, 50)];
+    add.imageEdgeInsets = UIEdgeInsetsMake(0, 20, 20, 0);
+    [add setImage:[UIImage imageNamed:@"add@3x.png"] forState:UIControlStateNormal];
     add.layer.allowsEdgeAntialiasing = YES;
     [add addTarget:self action:@selector(actionAdd) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:add];
@@ -337,8 +338,9 @@
 #pragma - Setup SetUser Button
 
 - (void)setupSetUserButton {
-    UIButton *setUser = [[UIButton alloc] initWithFrame:CGRectMake(15, 28, 28, 28)];
-    [setUser setBackgroundImage:[UIImage imageNamed:@"setUser@3x.png"] forState:UIControlStateNormal];
+    UIButton *setUser = [[UIButton alloc] initWithFrame:CGRectMake(15, 28, 28 + 20, 28 + 20)];
+    setUser.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 20, 20);
+    [setUser setImage:[UIImage imageNamed:@"setUser@3x.png"] forState:UIControlStateNormal];
     [setUser addTarget:self action:@selector(actionSetUser) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:setUser];
 }
@@ -375,19 +377,6 @@
 
 - (NSString *)popUpSuffixForlineGraph:(BEMSimpleLineGraphView *)graph {
     return @" kg";
-}
-
-#pragma - present new view
-
-- (void)test {
-    CATransition* transition = [CATransition animation];
-    transition.duration = 1;
-    transition.type = kCATransitionFade;
-    transition.subtype = kCATransitionFromBottom;
-    [self.view.window.layer addAnimation:transition forKey:kCATransition];
-    UIViewController *test = [[UIViewController alloc] init];
-    test.view.backgroundColor = [UIColor redColor];
-    [self presentViewController:test animated:NO completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {

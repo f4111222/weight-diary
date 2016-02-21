@@ -627,12 +627,13 @@
 			baseConfigurationReference = C3C506514E13E5B1FA0CB87B /* Pods-WeightDiary.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				INFOPLIST_FILE = WeightDiary/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.diary.weight.WeightDiary;
+				PRODUCT_BUNDLE_IDENTIFIER = com.diary.weight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ffc34e9b-0834-478b-81a4-7c521868ebb4";
 			};
 			name = Debug;
 		};
@@ -641,12 +642,13 @@
 			baseConfigurationReference = 0E740A05DE9CE9BB73835EDD /* Pods-WeightDiary.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				INFOPLIST_FILE = WeightDiary/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.diary.weight.WeightDiary;
+				PRODUCT_BUNDLE_IDENTIFIER = com.diary.weight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ffc34e9b-0834-478b-81a4-7c521868ebb4";
 			};
 			name = Release;
 		};

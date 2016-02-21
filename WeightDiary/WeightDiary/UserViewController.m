@@ -189,11 +189,11 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.historyTable.frame.size.width, 30)];
     [headerView setBackgroundColor:[UIColor colorWithHexString:@"#eaeaea"]];
     
-    NSInteger year = [self.historyHeader[section][0] integerValue];
-    NSInteger month = [self.historyHeader[section][1] integerValue];
+    int year = [self.historyHeader[section][0] intValue];
+    int month = [self.historyHeader[section][1] intValue];
     
     UILabel *date = [[UILabel alloc] initWithFrame:CGRectMake(13, 2, 100, 26)];
-    date.text = [NSString stringWithFormat:@"%ld年%ld月", year, month];
+    date.text = [NSString stringWithFormat:@"%d年%d月", year, month];
     date.font = [UIFont systemFontOfSize:16 weight:UIFontWeightSemibold];
     date.textAlignment = NSTextAlignmentLeft;
     [headerView addSubview:date];
@@ -217,7 +217,7 @@
             if (gapValue > 0) {
                 gap.text = [NSString stringWithFormat:@"-%.1lf kg", gapValue];
             } else {
-                gap.text = [NSString stringWithFormat:@"+%.1lf kg", gapValue];
+                gap.text = [NSString stringWithFormat:@"+%.1lf kg", -gapValue];
             }
             
             [headerView addSubview:gap];

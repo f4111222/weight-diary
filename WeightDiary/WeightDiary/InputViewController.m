@@ -82,11 +82,11 @@
     [self.view addSubview:line1];
     
     self.gender = [[UILabel alloc] initWithFrame:CGRectMake(genderLeft, genderTop, genderWidth, genderHeight)];
-//    self.gender.text = @"男";
     self.gender.text = [Config userGender];
     self.gender.font = [UIFont boldSystemFontOfSize:20];
     self.gender.textColor = [UIColor colorWithHexString:@"#404d5f"];
     self.gender.textAlignment = NSTextAlignmentRight;
+    [self.gender setUserInteractionEnabled:YES];
     [self.view addSubview:self.gender];
     
     UIButton *editGender = [[UIButton alloc] initWithFrame:CGRectMake(editGenderLeft, editGenderTop, editGenderWidth, editGenderHeight)];
@@ -124,11 +124,11 @@
     [self.view addSubview:line1];
     
     self.height = [[UILabel alloc] initWithFrame:CGRectMake(heightLeft, heightTop, heightWidth, heightHeight)];
-//    self.height.text = @"170.0 cm";
     self.height.text = [Config userHeight];
     self.height.font = [UIFont boldSystemFontOfSize:20];
     self.height.textColor = [UIColor colorWithHexString:@"#404d5f"];
     self.height.textAlignment = NSTextAlignmentRight;
+    [self.height setUserInteractionEnabled:YES];
     [self.view addSubview:self.height];
     
     UIButton *editHeight = [[UIButton alloc] initWithFrame:CGRectMake(editHeightLeft, editHeightTop, editHeightWidth, editHeightHeight)];
@@ -171,6 +171,7 @@
     self.target.font = [UIFont boldSystemFontOfSize:20];
     self.target.textColor = [UIColor colorWithHexString:@"#404d5f"];
     self.target.textAlignment = NSTextAlignmentRight;
+    [self.target setUserInteractionEnabled:YES];
     [self.view addSubview:self.target];
     
     UIButton *editTarget = [[UIButton alloc] initWithFrame:CGRectMake(editTargetLeft, editTargetTop, editTargetWidth, editTargetHeight)];
@@ -337,18 +338,25 @@
 - (void)actionTap:(UITapGestureRecognizer *)tap {
     CGPoint location = [tap locationInView:self.view];
     
-    if (location.x > 40 && location.x < CGRectGetWidth(self.view.frame) - 40
-        && location.y > 100 && location.y < self.suggestion.frame.origin.y + 40 + 10 + 40) {
+    if (location.y > 80 && location.y < self.suggestion.frame.origin.y + 40 + 10 + 40 + 30) {
         return;
     } else {
         [self actionDismiss];
     }
 }
 
-//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-//    if (self.allowTouchDismiss) {
-//        [self actionDismiss];
-//    }
-//}
+#pragma - Touch to edit
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+
+    if (touch.view == self.gender) {
+        [self actionSelectGender];
+    } else if (touch.view == self.height) {
+        [self actionSelectHeight];
+    } else if (touch.view == self.target) {
+        [self actionSelectTarget];
+    }
+}
 
 @end
