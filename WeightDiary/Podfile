@@ -1,10 +1,9 @@
 platform :ios, '7.0'
 
 target 'WeightDiary' do
-    pod 'SDWebImage'
-    pod 'MBProgressHUD'
     pod 'UIColor-HexString'
     pod 'PNChart'
     pod 'BEMSimpleLineGraph'
     pod 'FMDB'
+    pod 'MGSwipeTableCell'
 end

@@ -56,7 +56,7 @@
 
     // set TabBar item for each view
     [dataView setTabBarItem:dataItem];
-    [userView setTabBarItem:userItem];
+    [userView setTabBarItem:historyItem];
     
     // set TabBar border color
     [self.tabBar.layer setBorderWidth:1];
@@ -66,10 +66,10 @@
     [self setViewControllers:@[dataView, userView]];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
-    if ([Config needSetUserInfo]) {
+    if (![Config isUserInfoStored]) {
         NSLog(@"TabBar: InputView");
         CATransition* transition = [CATransition animation];
         transition.duration = 1;
@@ -78,6 +78,7 @@
         [self.view.window.layer addAnimation:transition forKey:kCATransition];
         
         InputViewController *inputView = [[InputViewController alloc] init];
+        inputView.allowTouchDismiss = NO;
         [self presentViewController:inputView animated:NO completion:nil];
     }
 }

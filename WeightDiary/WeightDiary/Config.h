@@ -11,8 +11,8 @@
 
 @interface Config : NSObject
 
-+ (void)setNeedSetUserInfo:(BOOL)need;
-+ (BOOL)needSetUserInfo;
++ (void)setIsUserInfoStored:(BOOL)stored;
++ (BOOL)isUserInfoStored;
 
 + (void)setUserGender:(NSString *)gender;
 + (NSString *)userGender;

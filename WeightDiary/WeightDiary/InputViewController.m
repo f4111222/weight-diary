@@ -21,7 +21,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    [self setupLogo];
+//    [self setupLogo];
     [self setupGenderInput];
     [self setupHeightInput];
     [self setupTargetInput];
@@ -29,6 +29,11 @@
     [self setupSubmitButton];
     
     [self addObserver:self forKeyPath:@"height.text" options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:nil];
+    
+    if (self.allowTouchDismiss) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionTap:)];
+        [self.view addGestureRecognizer:tap];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -52,7 +57,7 @@
 - (void)setupGenderInput {
     // setup position and size
     CGFloat genderTipLeft = 40;
-    CGFloat genderTipTop = 150;
+    CGFloat genderTipTop = 100;
     CGFloat genderTipWidth = 40;
     CGFloat genderTipHeight = 30;
     
@@ -77,7 +82,8 @@
     [self.view addSubview:line1];
     
     self.gender = [[UILabel alloc] initWithFrame:CGRectMake(genderLeft, genderTop, genderWidth, genderHeight)];
-    self.gender.text = @"男";
+//    self.gender.text = @"男";
+    self.gender.text = [Config userGender];
     self.gender.font = [UIFont boldSystemFontOfSize:20];
     self.gender.textColor = [UIColor colorWithHexString:@"#404d5f"];
     self.gender.textAlignment = NSTextAlignmentRight;
@@ -118,7 +124,8 @@
     [self.view addSubview:line1];
     
     self.height = [[UILabel alloc] initWithFrame:CGRectMake(heightLeft, heightTop, heightWidth, heightHeight)];
-    self.height.text = @"170.0 cm";
+//    self.height.text = @"170.0 cm";
+    self.height.text = [Config userHeight];
     self.height.font = [UIFont boldSystemFontOfSize:20];
     self.height.textColor = [UIColor colorWithHexString:@"#404d5f"];
     self.height.textAlignment = NSTextAlignmentRight;
@@ -159,7 +166,8 @@
     [self.view addSubview:line1];
     
     self.target = [[UILabel alloc] initWithFrame:CGRectMake(targetLeft, targetTop, targetWidth, targetHeight)];
-    self.target.text = @"60.0 kg";
+//    self.target.text = @"60.0 kg";
+    self.target.text = [Config userTarget];
     self.target.font = [UIFont boldSystemFontOfSize:20];
     self.target.textColor = [UIColor colorWithHexString:@"#404d5f"];
     self.target.textAlignment = NSTextAlignmentRight;
@@ -200,24 +208,31 @@
     [submit setBackgroundImage:[Config imageFromColor:[UIColor colorWithHexString:@"#7f428bca"]] forState:UIControlStateHighlighted];
     submit.layer.cornerRadius = 3;
     submit.clipsToBounds = YES;
-    [submit addTarget:self action:@selector(actionSumbit) forControlEvents:UIControlEventTouchUpInside];
+    [submit addTarget:self action:@selector(actionSubmit) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:submit];
 }
 
 #pragma - Button Action
 
-- (void)actionSumbit {
+- (void)actionSubmit {
     [Config setUserGender:self.gender.text];
     [Config setUserHeight:self.height.text];
     [Config setUserTarget:self.target.text];
     
+    if (self.allowTouchDismiss == NO) {
+        [Config setIsUserInfoStored:YES];
+    }
+    
+    [self actionDismiss];
+}
+
+- (void)actionDismiss {
     CATransition* transition = [CATransition animation];
     transition.duration = 0.5;
     transition.type = kCATransitionFade;
     transition.subtype = kCATransitionFromTop;
     [self.view.window.layer addAnimation:transition forKey:kCATransition];
     [self dismissViewControllerAnimated:NO completion:nil];
-    [Config setNeedSetUserInfo:NO];
 }
 
 - (void)actionSelectGender {
@@ -316,5 +331,24 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma - Touch to Dismiss
+
+- (void)actionTap:(UITapGestureRecognizer *)tap {
+    CGPoint location = [tap locationInView:self.view];
+    
+    if (location.x > 40 && location.x < CGRectGetWidth(self.view.frame) - 40
+        && location.y > 100 && location.y < self.suggestion.frame.origin.y + 40 + 10 + 40) {
+        return;
+    } else {
+        [self actionDismiss];
+    }
+}
+
+//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+//    if (self.allowTouchDismiss) {
+//        [self actionDismiss];
+//    }
+//}
 
 @end

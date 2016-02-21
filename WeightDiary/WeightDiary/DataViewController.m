@@ -21,16 +21,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    double delta = [Config firstRecord] - [Config latestRecord];
-    if (delta < 0.1) {
-        self.weightDrop = @"0.0";
-    } else {
-        self.weightDrop = [NSString stringWithFormat:@"%.1lf", delta];
-    }
-    
-    self.historyData = [[[Config latestRecordWithCount:8] reverseObjectEnumerator] allObjects];
-    NSLog(@"%@", self.historyData);
-    
     [self setupAddButton];
     [self setupSetUserButton];
     [self setupTargetChart];
@@ -41,20 +31,93 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (self.targetChart) {
-        [self.targetChart strokeChart];
+    // set drop value
+    NSString *dropString = @"  0.0kg";
+    
+    double delta = [Config firstRecord] - [Config latestRecord];
+    if (delta > 0.1) {
+        dropString = [NSString stringWithFormat:@"  %.1lfkg", delta];
     }
     
+    NSMutableAttributedString *dropText = [[NSMutableAttributedString alloc] initWithString:dropString];
+    NSRange kgRange = [dropString rangeOfString:@"kg"];
+    [dropText addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:25] range:NSMakeRange(0, 2)];
+    [dropText addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:50] range:NSMakeRange(2, kgRange.location - 2)];
+    [dropText addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:25] range:kgRange];
+    self.drop.attributedText = dropText;
+    
+    // set drop circle progress
+    double total = 0, current = 0;
+    if ([Config firstRecord] > 0) {
+        total = fabs([Config firstRecord] - [Config userTargetValue]);
+        current = [Config firstRecord] - [Config latestRecord];
+    }
+    if (current > total) {
+        current = total;
+    }
+    [self.targetChart setTotal:[NSNumber numberWithDouble:total]];
+    [self.targetChart setCurrent:[NSNumber numberWithDouble:current]];
+    
+    // set begin weight value
+    if (self.beginWeight) {
+        double beginWeightValue = [Config firstRecord];
+        if (beginWeightValue > 0) {
+            [self.beginWeight setHidden:NO];
+            self.beginWeight.text = [NSString stringWithFormat:@"%.1lf", beginWeightValue];
+        } else {
+            [self.beginWeight setHidden:YES];
+        }
+    }
+    
+    // set target weight value
+    self.targetWeight.text = [NSString stringWithFormat:@"%.1lf", [Config userTargetValue]];
+    
+    // set current weight value
+    if (self.currentWeight) {
+        double currentWeightValue = [Config latestRecord];
+        if (currentWeightValue > 0) {
+            [self.currentWeight setHidden:NO];
+            self.currentWeight.text = [NSString stringWithFormat:@"%.1lf", [Config latestRecord]];
+        } else {
+            [self.currentWeight setHidden:YES];
+        }
+    }
+    
+    // set bmi
+    if (self.beginWeight && self.currentWeight) {
+        if ([self.beginWeight isHidden] || [self.currentWeight isHidden]) {
+            [self.bmi setHidden:YES];
+        } else {
+            [self.bmi setHidden:NO];
+            double bmiValue = [Config getBMIWithHeight:[Config userHeight] weight:self.currentWeight.text];
+            self.bmi.text = [NSString stringWithFormat:@"%.1lf", bmiValue];
+        }
+    }
+    
+    // animation
     if (self.view) {
         [UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            for (UIView *subView in self.view.subviews) {
-                if (subView != self.targetChart && subView != self.historyChart) {
-                    subView.alpha = 0;
-                    subView.alpha = 1;
+            for (UIView *view in self.view.subviews) {
+                if (view && view != self.targetChart && view != self.historyChart) {
+                    view.alpha = 0;
+                    view.alpha = 1;
                 }
             }
         } completion:nil];
-        [self.historyChart reloadGraph];
+        
+        if (self.targetChart) {
+            [self.targetChart strokeChart];
+        }
+        
+        if (self.historyChart) {
+            self.historyData = [[[Config latestRecordWithCount:8] reverseObjectEnumerator] allObjects];
+            if ([self.historyData count] <= 1) {
+                [self.historyChart setHidden:YES];
+            } else {
+                [self.historyChart setHidden:NO];
+                [self.historyChart reloadGraph];
+            }
+        }
     }
 }
 
@@ -68,23 +131,16 @@
     
     CGFloat dropHeight = 60;
     CGFloat dropTop = targetChartTop + targetChartWidth / 2 - dropHeight / 2;
-    CGFloat dropLeft = targetChartLeft + 40;
+    CGFloat dropLeft = targetChartLeft + 30;
     CGFloat dropWidth = CGRectGetWidth(self.view.bounds) - dropLeft * 2;
     
     CGFloat dropTipHeight = 30;
-    CGFloat dropTipTop = dropTop - dropTipHeight;
-    CGFloat dropTipLeft = targetChartLeft + 40;
+    CGFloat dropTipTop = dropTop - dropTipHeight + 10;
+    CGFloat dropTipLeft = dropLeft;
     CGFloat dropTipWidth = CGRectGetWidth(self.view.bounds) - dropTipLeft * 2;
     
-    
-    double total = 0, current = 0;
-    if ([Config firstRecord] > 0) {
-        total = fabs([Config firstRecord] - [Config userTargetValue]);
-        current = [self.weightDrop doubleValue];
-    }
-    
     // setup target chart
-    self.targetChart = [[PNCircleChart alloc] initWithFrame:CGRectMake(targetChartLeft, targetChartTop, targetChartWidth, targetChartWidth) total:[NSNumber numberWithDouble:total] current:[NSNumber numberWithDouble:current] clockwise:YES shadow:YES shadowColor:[UIColor colorWithHexString:@"#d3e2e7"] displayCountingLabel:NO overrideLineWidth:@2];
+    self.targetChart = [[PNCircleChart alloc] initWithFrame:CGRectMake(targetChartLeft, targetChartTop, targetChartWidth, targetChartWidth) total:0 current:0 clockwise:YES shadow:YES shadowColor:[UIColor colorWithHexString:@"#d3e2e7"] displayCountingLabel:NO overrideLineWidth:@2];
     self.targetChart.backgroundColor = [UIColor clearColor];
     self.targetChart.strokeColor = [UIColor colorWithHexString:@"#47b5e5"];
     [self.view addSubview:self.targetChart];
@@ -98,18 +154,12 @@
     [self.view addSubview:dropTip];
     
     // setup drop label
-    UILabel *drop = [[UILabel alloc] initWithFrame:CGRectMake(dropLeft, dropTop, dropWidth, dropHeight)];
-    
-    NSString *dropString = [NSString stringWithFormat:@"  %@kg", self.weightDrop];
-    NSMutableAttributedString *dropText = [[NSMutableAttributedString alloc] initWithString:dropString];
-    [dropText addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:25] range:NSMakeRange(0, 2)];
-    [dropText addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:50] range:NSMakeRange(2, 3)];
-    [dropText addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:25] range:NSMakeRange(5, 2)];
-    drop.attributedText = dropText;
-    
-    drop.textColor = [UIColor colorWithHexString:@"#404d5f"];
-    drop.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:drop];
+    self.drop = [[UILabel alloc] initWithFrame:CGRectMake(dropLeft, dropTop, dropWidth, dropHeight)];
+    self.drop.textColor = [UIColor colorWithHexString:@"#404d5f"];
+    self.drop.textAlignment = NSTextAlignmentCenter;
+    self.drop.minimumScaleFactor = 0.6;
+    self.drop.adjustsFontSizeToFitWidth = YES;
+    [self.view addSubview:self.drop];
 }
 
 - (void)setupHistoryChart {
@@ -202,110 +252,73 @@
     [line4 setBackgroundColor:[UIColor colorWithHexString:@"#e6e8ea"]];
     [self.view addSubview:line4];
     
+    // setup label for begin weight tip
+    UILabel *beginWeightTip = [[UILabel alloc] initWithFrame:CGRectMake(beginWeightTipLeft, beginWeightTipTop, beginWeightTipWidth, beginWeightTipHeight)];
+    beginWeightTip.text = @"初始体重 (kg)";
+    beginWeightTip.textColor = [UIColor colorWithHexString:@"#858e9b"];
+    beginWeightTip.font = [UIFont systemFontOfSize:14];
+    beginWeightTip.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:beginWeightTip];
     
-    double firstWeight = [Config firstRecord];
-    if (firstWeight > 0) {
-        // setup label for begin weight tip
-        UILabel *beginWeightTip = [[UILabel alloc] initWithFrame:CGRectMake(beginWeightTipLeft, beginWeightTipTop, beginWeightTipWidth, beginWeightTipHeight)];
-        beginWeightTip.text = @"初始体重 (kg)";
-        beginWeightTip.textColor = [UIColor colorWithHexString:@"#858e9b"];
-        beginWeightTip.font = [UIFont systemFontOfSize:14];
-        beginWeightTip.textAlignment = NSTextAlignmentLeft;
-        [self.view addSubview:beginWeightTip];
-        
-        // setup label for begin weight
-        UILabel *beginWeight = [[UILabel alloc] initWithFrame:CGRectMake(beginWeightLeft, beginWeightTop, beginWeightWidth, beginWeightHeight)];
-//        NSString *beginWeightString = [NSString stringWithFormat:@"%.1lfkg", firstWeight];
-//        NSMutableAttributedString *beginWeightText = [[NSMutableAttributedString alloc] initWithString:beginWeightString];
-//        NSRange kgRange = [beginWeightString rangeOfString:@"kg"];
-//        [beginWeightText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:38] range:NSMakeRange(0, kgRange.location)];
-//        [beginWeightText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:kgRange];
-//        beginWeight.attributedText = beginWeightText;
-        beginWeight.text = [NSString stringWithFormat:@"%.1lf", firstWeight];
-        beginWeight.font = [UIFont systemFontOfSize:38];
-        beginWeight.textColor = [UIColor colorWithHexString:@"#404d5f"];
-        beginWeight.textAlignment = NSTextAlignmentLeft;
-        
-        [self.view addSubview:beginWeight];
-    }
+    // setup label for begin weight
+    self.beginWeight = [[UILabel alloc] initWithFrame:CGRectMake(beginWeightLeft, beginWeightTop, beginWeightWidth, beginWeightHeight)];
+    self.beginWeight.font = [UIFont systemFontOfSize:38];
+    self.beginWeight.textColor = [UIColor colorWithHexString:@"#404d5f"];
+    self.beginWeight.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:self.beginWeight];
     
-    double target = [Config userTargetValue];
-    if (target > 0) {
-        // setup label for target weight tip
-        UILabel *targetWeightTip = [[UILabel alloc] initWithFrame:CGRectMake(targetWeightTipLeft, targetWeightTipTop, targetWeightTipWidth, targetWeightTipHeight)];
-        targetWeightTip.text = @"目标体重 (kg)";
-        targetWeightTip.textColor = [UIColor colorWithHexString:@"#858e9b"];
-        targetWeightTip.font = [UIFont systemFontOfSize:14];
-        targetWeightTip.textAlignment = NSTextAlignmentLeft;
-        [self.view addSubview:targetWeightTip];
-        
-        // setup label for begin weight
-        UILabel *targetWeight = [[UILabel alloc] initWithFrame:CGRectMake(targetWeightLeft, targetWeightTop, targetWeightWidth, targetWeightHeight)];
-//        NSString *targetWeightString = [NSString stringWithFormat:@"%.1lfkg", target];
-//        NSMutableAttributedString *targetWeightText = [[NSMutableAttributedString alloc] initWithString:targetWeightString];
-//        NSRange kgRange = [targetWeightString rangeOfString:@"kg"];
-//        [targetWeightText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:38] range:NSMakeRange(0, kgRange.location)];
-//        [targetWeightText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:kgRange];
-        targetWeight.text = [NSString stringWithFormat:@"%.1lf", target];
-        targetWeight.font = [UIFont systemFontOfSize:38];
-        targetWeight.textColor = [UIColor colorWithHexString:@"#404d5f"];
-        targetWeight.textAlignment = NSTextAlignmentLeft;
-        
-        [self.view addSubview:targetWeight];
-    }
+    // setup label for target weight tip
+    UILabel *targetWeightTip = [[UILabel alloc] initWithFrame:CGRectMake(targetWeightTipLeft, targetWeightTipTop, targetWeightTipWidth, targetWeightTipHeight)];
+    targetWeightTip.text = @"目标体重 (kg)";
+    targetWeightTip.textColor = [UIColor colorWithHexString:@"#858e9b"];
+    targetWeightTip.font = [UIFont systemFontOfSize:14];
+    targetWeightTip.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:targetWeightTip];
     
-    double currentWeightValue = [Config latestRecord];
-    if (currentWeightValue > 0) {
-        // setup label for current weight tip
-        UILabel *currentWeightTip = [[UILabel alloc] initWithFrame:CGRectMake(currentWeightTipLeft, currentWeightTipTop, currentWeightTipWidth, currentWeightTipHeight)];
-        currentWeightTip.text = @"当前体重 (kg)";
-        currentWeightTip.textColor = [UIColor colorWithHexString:@"#858e9b"];
-        currentWeightTip.font = [UIFont systemFontOfSize:14];
-        currentWeightTip.textAlignment = NSTextAlignmentLeft;
-        [self.view addSubview:currentWeightTip];
-        
-        // setup label for current weight
-        UILabel *currentWeight = [[UILabel alloc] initWithFrame:CGRectMake(currentWeightLeft, currentWeightTop, currentWeightWidth, currentWeightHeight)];
-        
-        NSString *currentWeightString = [NSString stringWithFormat:@"%.1lfkg", currentWeightValue];
-        NSMutableAttributedString *currentWeightText = [[NSMutableAttributedString alloc] initWithString:currentWeightString];
-        NSRange kgRange = [currentWeightString rangeOfString:@"kg"];
-        [currentWeightText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:38] range:NSMakeRange(0, kgRange.location)];
-        [currentWeightText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:kgRange];
-//        currentWeight.attributedText = currentWeightText;
-        currentWeight.text = [NSString stringWithFormat:@"%.1lf", currentWeightValue];
-        currentWeight.font = [UIFont systemFontOfSize:38];
-        currentWeight.textColor = [UIColor colorWithHexString:@"#404d5f"];
-        currentWeight.textAlignment = NSTextAlignmentLeft;
-        
-        [self.view addSubview:currentWeight];
-    }
+    // setup label for target weight
+    self.targetWeight = [[UILabel alloc] initWithFrame:CGRectMake(targetWeightLeft, targetWeightTop, targetWeightWidth, targetWeightHeight)];
+    self.targetWeight.font = [UIFont systemFontOfSize:38];
+    self.targetWeight.textColor = [UIColor colorWithHexString:@"#404d5f"];
+    self.targetWeight.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:self.targetWeight];
     
-    if (target > 0) {
-        // setup label for bmi tip
-        UILabel *bmiTip = [[UILabel alloc] initWithFrame:CGRectMake(bmiTipLeft, bmiTipTop, bmiTipWidth, bmiTipHeight)];
-        bmiTip.text = @"BMI";
-        bmiTip.textColor = [UIColor colorWithHexString:@"#858e9b"];
-        bmiTip.font = [UIFont systemFontOfSize:14];
-        bmiTip.textAlignment = NSTextAlignmentLeft;
-        [self.view addSubview:bmiTip];
-        
-        double bmiValue = [Config getBMIWithHeight:[Config userHeight] weight:[NSString stringWithFormat:@"%.1lf", [Config latestRecord]]];
-        // setup label for begin weight
-        UILabel *bmi = [[UILabel alloc] initWithFrame:CGRectMake(bmiLeft, bmiTop, bmiWidth, bmiHeight)];
-        bmi.text = [NSString stringWithFormat:@"%.1lf", bmiValue];
-        bmi.textColor = [UIColor colorWithHexString:@"#404d5f"];
-        bmi.textAlignment = NSTextAlignmentLeft;
-        bmi.font = [UIFont systemFontOfSize:38];
-        [self.view addSubview:bmi];
-    }
+    // setup label for current weight tip
+    UILabel *currentWeightTip = [[UILabel alloc] initWithFrame:CGRectMake(currentWeightTipLeft, currentWeightTipTop, currentWeightTipWidth, currentWeightTipHeight)];
+    currentWeightTip.text = @"当前体重 (kg)";
+    currentWeightTip.textColor = [UIColor colorWithHexString:@"#858e9b"];
+    currentWeightTip.font = [UIFont systemFontOfSize:14];
+    currentWeightTip.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:currentWeightTip];
+    
+    // setup label for current weight
+    self.currentWeight = [[UILabel alloc] initWithFrame:CGRectMake(currentWeightLeft, currentWeightTop, currentWeightWidth, currentWeightHeight)];
+    self.currentWeight.font = [UIFont systemFontOfSize:38];
+    self.currentWeight.textColor = [UIColor colorWithHexString:@"#404d5f"];
+    self.currentWeight.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:self.currentWeight];
+    
+    // setup label for bmi tip
+    UILabel *bmiTip = [[UILabel alloc] initWithFrame:CGRectMake(bmiTipLeft, bmiTipTop, bmiTipWidth, bmiTipHeight)];
+    bmiTip.text = @"BMI";
+    bmiTip.textColor = [UIColor colorWithHexString:@"#858e9b"];
+    bmiTip.font = [UIFont systemFontOfSize:14];
+    bmiTip.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:bmiTip];
+    
+    // setup label for begin weight
+    self.bmi = [[UILabel alloc] initWithFrame:CGRectMake(bmiLeft, bmiTop, bmiWidth, bmiHeight)];
+    self.bmi.textColor = [UIColor colorWithHexString:@"#404d5f"];
+    self.bmi.textAlignment = NSTextAlignmentLeft;
+    self.bmi.font = [UIFont systemFontOfSize:38];
+    [self.view addSubview:self.bmi];
 }
 
 #pragma - Setup Add Button
 
 - (void)setupAddButton {
-    UIButton *add = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 20 - 20, 30, 30, 30)];
+    UIButton *add = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.view.frame) - 10 - 30, 28, 30, 30)];
     [add setBackgroundImage:[UIImage imageNamed:@"add@3x.png"] forState:UIControlStateNormal];
+    add.layer.allowsEdgeAntialiasing = YES;
     [add addTarget:self action:@selector(actionAdd) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:add];
 }
@@ -324,7 +337,7 @@
 #pragma - Setup SetUser Button
 
 - (void)setupSetUserButton {
-    UIButton *setUser = [[UIButton alloc] initWithFrame:CGRectMake(20, 30, 30, 30)];
+    UIButton *setUser = [[UIButton alloc] initWithFrame:CGRectMake(15, 28, 28, 28)];
     [setUser setBackgroundImage:[UIImage imageNamed:@"setUser@3x.png"] forState:UIControlStateNormal];
     [setUser addTarget:self action:@selector(actionSetUser) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:setUser];
@@ -338,6 +351,7 @@
     [self.view.window.layer addAnimation:transition forKey:kCATransition];
     
     InputViewController *inputView = [[InputViewController alloc] init];
+    inputView.allowTouchDismiss = YES;
     [self presentViewController:inputView animated:NO completion:nil];
 }
 

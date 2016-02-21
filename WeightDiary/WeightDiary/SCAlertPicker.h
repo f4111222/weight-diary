@@ -14,6 +14,7 @@
 
 @property (strong, nonatomic) id<SCAlertPickerDelegte> delegate;
 @property (strong, nonatomic) UIPickerView *picker;
+@property (strong, nonatomic) UIDatePicker *datePicker;
 @property (strong, nonatomic) NSMutableArray *valueIndex;
 @property (strong, nonatomic) NSArray *pickerData;
 @property (strong, nonatomic) UIButton *submitButton;
@@ -24,12 +25,18 @@
                         pickerIndex:(NSArray *)pickerIndex
                            delegate:(id<SCAlertPickerDelegte>)delegate;
 
+- (instancetype)initWithButtonTitle:(NSString *)buttonTile
+                     datePickerMode:(UIDatePickerMode)datePickerMode
+                           delegate:(id<SCAlertPickerDelegte>)delegate;
+
 - (void)show;
 
 @end
 
 @protocol SCAlertPickerDelegte <NSObject>
 
+@optional
 - (void)SCAlertPicker:(SCAlertPicker *)alertPicker ClickWithValues:(NSArray *)values;
+- (void)SCAlertPicker:(SCAlertPicker *)alertPicker ClickWithDate:(NSDate *)date;
 
 @end

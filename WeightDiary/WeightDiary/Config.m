@@ -13,19 +13,19 @@
 
 #pragma - User Infomation
 
-+ (BOOL)needSetUserInfo {
++ (BOOL)isUserInfoStored {
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    BOOL needSetUserInfo = [userDefault boolForKey:@"NeedSetUserInfo"];
-    if (needSetUserInfo) {
+    BOOL isUserInfoStored = [userDefault boolForKey:@"UserInfoStored"];
+    if (isUserInfoStored) {
         return YES;
     } else {
         return NO;
     }
 }
 
-+ (void)setNeedSetUserInfo:(BOOL)need {
++ (void)setIsUserInfoStored:(BOOL)stored {
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    [userDefault setBool:need forKey:@"NeedSetUserInfo"];
+    [userDefault setBool:stored forKey:@"UserInfoStored"];
     [userDefault synchronize];
 }
 
@@ -37,7 +37,11 @@
 
 + (NSString *)userGender {
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    return [userDefault objectForKey:@"UserGender"];
+    NSString *userGender = [userDefault objectForKey:@"UserGender"];
+    if (!userGender) {
+        userGender = @"男";
+    }
+    return userGender;
 }
 
 + (void)setUserHeight:(NSString *)height {
@@ -48,7 +52,11 @@
 
 + (NSString *)userHeight {
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    return [userDefault objectForKey:@"UserHeight"];
+    NSString *userHeight = [userDefault objectForKey:@"UserHeight"];
+    if (!userHeight) {
+        userHeight = @"170.0 cm";
+    }
+    return userHeight;
 }
 
 + (double)userHeightValue {
@@ -65,7 +73,11 @@
 
 + (NSString *)userTarget {
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    return [userDefault objectForKey:@"UserTarget"];
+    NSString *userTarget = [userDefault objectForKey:@"UserTarget"];
+    if (!userTarget) {
+        userTarget = @"60.0 kg";
+    }
+    return userTarget;
 }
 
 + (double)userTargetValue {

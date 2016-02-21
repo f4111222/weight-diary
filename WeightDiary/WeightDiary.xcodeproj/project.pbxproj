@@ -23,11 +23,13 @@
 		4123EF9A1C6B3FD8000290D7 /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4123EF991C6B3FD8000290D7 /* TabBarController.m */; };
 		4123EF9D1C6B43FF000290D7 /* DataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4123EF9C1C6B43FF000290D7 /* DataViewController.m */; };
 		41258DB21C6E10D800BD3AF5 /* SCAlertPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 41258DB11C6E10D800BD3AF5 /* SCAlertPicker.m */; };
-		412A88051C7356B60073BEC3 /* add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 412A88041C7356B60073BEC3 /* add@3x.png */; };
 		412A88081C7357E10073BEC3 /* AddRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 412A88071C7357E10073BEC3 /* AddRecordViewController.m */; };
+		4130454E1C788A97002C41F6 /* HistoryTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4130454D1C788A97002C41F6 /* HistoryTableCell.m */; };
+		4139BE5F1C785210000E20FA /* left@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4139BE5E1C785210000E20FA /* left@3x.png */; };
+		4139BE6B1C785690000E20FA /* add@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4139BE6A1C785690000E20FA /* add@3x.png */; };
+		4139BE6F1C785BB1000E20FA /* right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4139BE6E1C785BB1000E20FA /* right@3x.png */; };
 		4175F3031C712E2F009204C6 /* logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4175F3021C712E2F009204C6 /* logo@3x.png */; };
 		417F651C1C6DC46400A63B80 /* write@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 417F651B1C6DC46400A63B80 /* write@3x.png */; };
-		417F65241C6DC6F000A63B80 /* right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 417F65231C6DC6F000A63B80 /* right@3x.png */; };
 		4192EABC1C661F0600B0C0F5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4192EABB1C661F0600B0C0F5 /* main.m */; };
 		4192EABF1C661F0600B0C0F5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4192EABE1C661F0600B0C0F5 /* AppDelegate.m */; };
 		4192EAC51C661F0600B0C0F5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4192EAC31C661F0600B0C0F5 /* Main.storyboard */; };
@@ -36,7 +38,6 @@
 		4192EACD1C661F0600B0C0F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4192EACB1C661F0600B0C0F5 /* LaunchScreen.storyboard */; };
 		4192EAD81C661F0600B0C0F5 /* WeightDiaryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4192EAD71C661F0600B0C0F5 /* WeightDiaryTests.m */; };
 		4192EAE31C661F0600B0C0F5 /* WeightDiaryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4192EAE21C661F0600B0C0F5 /* WeightDiaryUITests.m */; };
-		41FFAF121C745E22009A549A /* left@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41FFAF111C745E22009A549A /* left@3x.png */; };
 		41FFAF141C745FBD009A549A /* menu@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41FFAF131C745FBD009A549A /* menu@3x.png */; };
 		41FFAF161C74634B009A549A /* setUser@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41FFAF151C74634B009A549A /* setUser@3x.png */; };
 		A81F760AC49531FD322DA3C4 /* libPods-WeightDiary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08F65B2960CA6BACFE564736 /* libPods-WeightDiary.a */; };
@@ -84,12 +85,15 @@
 		4123EF9C1C6B43FF000290D7 /* DataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataViewController.m; sourceTree = "<group>"; };
 		41258DB01C6E10D800BD3AF5 /* SCAlertPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCAlertPicker.h; sourceTree = "<group>"; };
 		41258DB11C6E10D800BD3AF5 /* SCAlertPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCAlertPicker.m; sourceTree = "<group>"; };
-		412A88041C7356B60073BEC3 /* add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@3x.png"; sourceTree = "<group>"; };
 		412A88061C7357E10073BEC3 /* AddRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddRecordViewController.h; sourceTree = "<group>"; };
 		412A88071C7357E10073BEC3 /* AddRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddRecordViewController.m; sourceTree = "<group>"; };
+		4130454C1C788A97002C41F6 /* HistoryTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryTableCell.h; sourceTree = "<group>"; };
+		4130454D1C788A97002C41F6 /* HistoryTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryTableCell.m; sourceTree = "<group>"; };
+		4139BE5E1C785210000E20FA /* left@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left@3x.png"; sourceTree = "<group>"; };
+		4139BE6A1C785690000E20FA /* add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add@3x.png"; sourceTree = "<group>"; };
+		4139BE6E1C785BB1000E20FA /* right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right@3x.png"; sourceTree = "<group>"; };
 		4175F3021C712E2F009204C6 /* logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo@3x.png"; sourceTree = "<group>"; };
 		417F651B1C6DC46400A63B80 /* write@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "write@3x.png"; sourceTree = "<group>"; };
-		417F65231C6DC6F000A63B80 /* right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right@3x.png"; sourceTree = "<group>"; };
 		4192EAB71C661F0600B0C0F5 /* WeightDiary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeightDiary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4192EABB1C661F0600B0C0F5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4192EABD1C661F0600B0C0F5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -105,7 +109,6 @@
 		4192EADE1C661F0600B0C0F5 /* WeightDiaryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeightDiaryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4192EAE21C661F0600B0C0F5 /* WeightDiaryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeightDiaryUITests.m; sourceTree = "<group>"; };
 		4192EAE41C661F0600B0C0F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		41FFAF111C745E22009A549A /* left@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left@3x.png"; sourceTree = "<group>"; };
 		41FFAF131C745FBD009A549A /* menu@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu@3x.png"; sourceTree = "<group>"; };
 		41FFAF151C74634B009A549A /* setUser@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "setUser@3x.png"; sourceTree = "<group>"; };
 		C3C506514E13E5B1FA0CB87B /* Pods-WeightDiary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeightDiary.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeightDiary/Pods-WeightDiary.debug.xcconfig"; sourceTree = "<group>"; };
@@ -155,6 +158,8 @@
 				410B63CB1C6DBAC00076F37D /* Config.m */,
 				41258DB01C6E10D800BD3AF5 /* SCAlertPicker.h */,
 				41258DB11C6E10D800BD3AF5 /* SCAlertPicker.m */,
+				4130454C1C788A97002C41F6 /* HistoryTableCell.h */,
+				4130454D1C788A97002C41F6 /* HistoryTableCell.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -179,13 +184,13 @@
 		4123EF661C6B1F40000290D7 /* Asset */ = {
 			isa = PBXGroup;
 			children = (
+				4139BE6A1C785690000E20FA /* add@3x.png */,
+				4139BE5E1C785210000E20FA /* left@3x.png */,
 				41FFAF151C74634B009A549A /* setUser@3x.png */,
 				41FFAF131C745FBD009A549A /* menu@3x.png */,
-				41FFAF111C745E22009A549A /* left@3x.png */,
-				412A88041C7356B60073BEC3 /* add@3x.png */,
 				4175F3021C712E2F009204C6 /* logo@3x.png */,
 				4123A55A1C6EC6A8008E188D /* cross@3x.png */,
-				417F65231C6DC6F000A63B80 /* right@3x.png */,
+				4139BE6E1C785BB1000E20FA /* right@3x.png */,
 				417F651B1C6DC46400A63B80 /* write@3x.png */,
 				4123EF831C6B35CE000290D7 /* data@3x.png */,
 				4123EF841C6B35CE000290D7 /* dataSelected@3x.png */,
@@ -378,15 +383,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4139BE6B1C785690000E20FA /* add@3x.png in Resources */,
 				4123A55B1C6EC6A8008E188D /* cross@3x.png in Resources */,
-				417F65241C6DC6F000A63B80 /* right@3x.png in Resources */,
-				41FFAF121C745E22009A549A /* left@3x.png in Resources */,
 				417F651C1C6DC46400A63B80 /* write@3x.png in Resources */,
 				4123EF851C6B35CE000290D7 /* data@3x.png in Resources */,
+				4139BE5F1C785210000E20FA /* left@3x.png in Resources */,
+				4139BE6F1C785BB1000E20FA /* right@3x.png in Resources */,
 				4192EACD1C661F0600B0C0F5 /* LaunchScreen.storyboard in Resources */,
 				4123EF941C6B3AF4000290D7 /* settingSelected@3x.png in Resources */,
 				4123EF821C6B353E000290D7 /* history@3x.png in Resources */,
-				412A88051C7356B60073BEC3 /* add@3x.png in Resources */,
 				4123EF8F1C6B3A46000290D7 /* user@3x.png in Resources */,
 				4123EF801C6B349F000290D7 /* historySelected@3x.png in Resources */,
 				4123EF8C1C6B398D000290D7 /* addRecord@3x.png in Resources */,
@@ -472,6 +477,7 @@
 			files = (
 				4123EF9D1C6B43FF000290D7 /* DataViewController.m in Sources */,
 				4123EF9A1C6B3FD8000290D7 /* TabBarController.m in Sources */,
+				4130454E1C788A97002C41F6 /* HistoryTableCell.m in Sources */,
 				41258DB21C6E10D800BD3AF5 /* SCAlertPicker.m in Sources */,
 				4192EAC81C661F0600B0C0F5 /* WeightDiary.xcdatamodeld in Sources */,
 				4192EABF1C661F0600B0C0F5 /* AppDelegate.m in Sources */,

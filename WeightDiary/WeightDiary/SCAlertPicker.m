@@ -16,6 +16,16 @@
 
 @implementation SCAlertPicker
 
+/**
+ *  init with normal picker
+ *
+ *  @param buttonTitle button text
+ *  @param pickerData  2d-array stores picker data
+ *  @param pickerIndex picker's first position
+ *  @param delegate    action when button was clicked
+ *
+ *  @return SCAlertPicker with normal picker
+ */
 - (instancetype)initWithButtonTitle:(NSString *)buttonTitle
                          pickerData:(NSArray *)pickerData
                         pickerIndex:(NSArray *)pickerIndex
@@ -64,6 +74,51 @@
             [self.picker selectRow:index inComponent:i animated:NO];
         }
         
+        self.delegate = delegate;
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithButtonTitle:(NSString *)buttonTitle
+                     datePickerMode:(UIDatePickerMode)datePickerMode
+                           delegate:(id<SCAlertPickerDelegte>)delegate {
+    self = [super init];
+    
+    if (self) {
+        NSLog(@"%.lf", CGRectGetWidth([UIScreen mainScreen].bounds));
+        // setup size and position
+        CGFloat viewWidth = MAX(CGRectGetWidth([UIScreen mainScreen].bounds) * 4 / 5, 300);
+        CGFloat viewHeight = 300;
+        CGFloat viewLeft = (CGRectGetWidth([UIScreen mainScreen].bounds) - viewWidth) / 2;
+        CGFloat viewTop = (CGRectGetHeight([UIScreen mainScreen].bounds) - viewHeight) / 2 - 30;
+        
+        CGFloat buttonHeight = 50;
+        
+        self.frame = CGRectMake(viewLeft, viewTop, viewWidth, viewHeight);
+        self.backgroundColor = [UIColor whiteColor];
+        self.layer.cornerRadius = 5;
+        self.layer.shadowOffset = CGSizeMake(1, 1);
+        self.layer.shadowColor = [UIColor blackColor].CGColor;
+        self.layer.shadowOpacity = 0.5;
+        self.clipsToBounds = YES;
+        
+        self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, viewWidth, viewHeight - buttonHeight)];
+        self.datePicker.datePickerMode = datePickerMode;
+        [self addSubview:self.datePicker];
+        
+        self.submitButton = [[UIButton alloc] initWithFrame:CGRectMake(0, viewHeight - buttonHeight, viewWidth, buttonHeight)];
+        [self.submitButton setTitle:buttonTitle forState:UIControlStateNormal];
+        
+        UIImage *submitButtonBackGround = [Config imageFromColor:[UIColor colorWithHexString:@"#7cbf6f"]];
+        UIImage *submitButtonBackgroundHighlighted = [Config imageFromColor:[UIColor colorWithHexString:@"#7f000000"]];
+        [self.submitButton setBackgroundImage:submitButtonBackGround forState:UIControlStateNormal];
+        [self.submitButton setBackgroundImage:submitButtonBackgroundHighlighted forState:UIControlStateHighlighted];
+        
+        [self.submitButton addTarget:self action:@selector(actionSubmit) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.submitButton];
+        
+        self.datePicker.backgroundColor = [UIColor clearColor];
         self.delegate = delegate;
     }
     
@@ -143,8 +198,12 @@
         [values addObject:self.pickerData[i][index]];
     }
     
-    if ([self.delegate respondsToSelector:@selector(SCAlertPicker:ClickWithValues:)]) {
+    if (self.picker && [self.delegate respondsToSelector:@selector(SCAlertPicker:ClickWithValues:)]) {
         [self.delegate SCAlertPicker:self ClickWithValues:[values copy]];
+    }
+    
+    if (self.datePicker && [self.delegate respondsToSelector:@selector(SCAlertPicker:ClickWithDate:)]) {
+        [self.delegate SCAlertPicker:self ClickWithDate:[self.datePicker date]];
     }
 }
 

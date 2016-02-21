@@ -20,4 +20,6 @@
 @property (strong, nonatomic) SCAlertPicker *heightPicker;
 @property (strong, nonatomic) SCAlertPicker *targetPicker;
 
+@property (nonatomic) BOOL allowTouchDismiss;
+
 @end
