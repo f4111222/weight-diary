@@ -4,9 +4,9 @@ iOS APP helping users record weight changes
 
 ##Screenshots
 
-![](https://raw.githubusercontent.com/luosch/weight-diary/master/screenshots/data.png)
+![](https://raw.githubusercontent.com/luosch/weight-diary/master/Screenshots/data.png)
 
-![](https://raw.githubusercontent.com/luosch/weight-diary/master/screenshots/history.png)
+![](https://raw.githubusercontent.com/luosch/weight-diary/master/Screenshots/history.png)
 
 ##Licenses
 
